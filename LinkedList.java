@@ -53,9 +53,18 @@ public class LinkedList {
 		if (index < 0 || index > size) {
 			throw new IllegalArgumentException(
 					"index must be between 0 and size");
+			
 		}
-		//// Replace the following statement with your code
-		return null;
+		if(first==null)
+			return null;
+		Node ptr=first;
+		while(index>0){
+			ptr=ptr.next;
+			index--;
+		}
+		return ptr;
+			
+
 	}
 	
 	/**
@@ -78,7 +87,33 @@ public class LinkedList {
 	 *         if index is negative or greater than the list's size
 	 */
 	public void add(int index, MemoryBlock block) {
-		//// Write your code here
+		if(index<0||index>size){
+			throw new IllegalArgumentException("index must be between 0 and size");
+		}
+		Node node = new Node(block);
+		if(index==size){
+			last.next=node;
+			last=last.next;
+			size++;
+		}else
+			if(index==0){
+				node.next=first;
+				first=node;
+				size++;
+			}
+			else{
+				Node ptr=first;
+				while(index>1){
+					ptr=ptr.next;
+					index--;
+				}
+				node.next=ptr.next;
+				ptr.next=node;
+				size++;
+			}
+
+		
+		
 	}
 
 	/**
@@ -89,7 +124,19 @@ public class LinkedList {
 	 *        the given memory block
 	 */
 	public void addLast(MemoryBlock block) {
-		//// Write your code here
+		
+		Node node = new Node(block);
+		if(size==0){
+			first=node;
+			last=first;
+			size++;
+		}else{
+
+		
+		last.next=node;
+		last=last.next;
+		size++;
+		}
 	}
 	
 	/**
@@ -100,7 +147,9 @@ public class LinkedList {
 	 *        the given memory block
 	 */
 	public void addFirst(MemoryBlock block) {
-		//// Write your code here
+		Node node=new Node(block);
+		node.next=first;
+		first=node;
 	}
 
 	/**
@@ -113,8 +162,15 @@ public class LinkedList {
 	 *         if index is negative or greater than or equal to size
 	 */
 	public MemoryBlock getBlock(int index) {
-		//// Replace the following statement with your code
-		return null;
+		if(index<0||index>=size){
+			throw new IllegalArgumentException("index must be between 0 and size-1");
+		}
+		Node ptr= first;
+		while(index>0){
+			ptr=ptr.next;
+			index--;
+		}
+		return ptr.block;
 	}	
 
 	/**
@@ -125,8 +181,16 @@ public class LinkedList {
 	 * @return the index of the block, or -1 if the block is not in this list
 	 */
 	public int indexOf(MemoryBlock block) {
-		//// Replace the following statement with your code
+		Node ptr=first;
+		int index=0;
+		while(ptr!=null){
+			if(ptr.block.equals(block))
+				return index;
+			index++;
+			ptr=ptr.next;
+		}
 		return -1;
+		
 	}
 
 	/**
@@ -136,7 +200,29 @@ public class LinkedList {
 	 *        the node that will be removed from this list
 	 */
 	public void remove(Node node) {
-		//// Write your code here
+		Node current=first;
+		if(current.equals(node)){
+			first=first.next;
+			size--;
+		}
+		else{
+			Node prev=current;
+			current=current.next;
+			while(current!=null){
+				if(current.equals(node)){
+					if(current.next==null){
+						prev.next=null;
+						last=prev;
+					}
+					else{
+						prev.next=current.next;
+						
+					}
+					size--;
+				}
+			}
+		}
+		
 	}
 
 	/**
@@ -147,7 +233,13 @@ public class LinkedList {
 	 *         if index is negative or greater than or equal to size
 	 */
 	public void remove(int index) {
-		//// Write your code here
+		if(index<0||index>=size){
+			throw new IllegalArgumentException("index should be between 0 and size-1");
+		}
+
+		remove(getNode(index));
+		
+		
 	}
 
 	/**
@@ -158,7 +250,10 @@ public class LinkedList {
 	 *         if the given memory block is not in this list
 	 */
 	public void remove(MemoryBlock block) {
-		//// Write your code here
+		if(indexOf(block)==-1){
+			throw new IllegalArgumentException("meomry block not in the list");
+		}
+		remove(indexOf(block));
 	}	
 
 	/**
@@ -172,7 +267,14 @@ public class LinkedList {
 	 * A textual representation of this list, for debugging.
 	 */
 	public String toString() {
-		//// Replace the following statement with your code
-		return "";
+		String str="";
+		if(size==0)
+			return str;
+
+		Node ptr=first;
+		while(ptr!=null){
+			str+= ptr.block.toString()+" ";
+		}
+		return str.substring(0,str.length()-1); //removes extra space
 	}
 }
